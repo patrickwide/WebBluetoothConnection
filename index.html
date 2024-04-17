@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bluetooth Printer</title>
+    <title>Bluetooth Connection</title>
 </head>
 <body>
     <h1>Bluetooth Printer</h1>
@@ -48,12 +48,13 @@
             // Function to handle the print button click event
             async function print() {
                 try {
-                    // Prepare print data (replace 'printData' with your actual print data)
-                    const printData = new Uint8Array([0x01, 0x02, 0x03]); // Example print data
+                    // // Prepare print data (replace 'printData' with your actual print data)
+                    // const printData = new Uint8Array([0x01, 0x02, 0x03]); // Example print data
 
-                    // Write print data to the printer characteristic
-                    await printerCharacteristic.writeValue(printData);
+                    // // Write print data to the printer characteristic
+                    // await printerCharacteristic.writeValue(printData);
 
+                    console.log('Handle Print job here');
                     console.log('Print job sent successfully');
                 } catch (error) {
                     console.error('Error:', error);
