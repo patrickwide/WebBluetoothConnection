@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bluetooth Printer</title>
+</head>
+<body>
+    <h1>Bluetooth Printer</h1>
+
+    <button id="connectButton">Connect</button>
+    <button id="printButton" disabled>Print</button>
+
+    <script>
+        let printerCharacteristic;
+
+        // Check if the browser supports Bluetooth
+        if ('bluetooth' in navigator) {
+            const connectButton = document.getElementById('connectButton');
+            const printButton = document.getElementById('printButton');
+
+            // Function to handle the connect button click event
+            async function connect() {
+                try {
+                    // Request a Bluetooth device
+                    const device = await navigator.bluetooth.requestDevice({
+                        acceptAllDevices: true
+                    });
+
+                    // Connect to the selected device
+                    const server = await device.gatt.connect();
+
+                    // Get the printer service
+                    const service = await server.getPrimaryService('printer_service');
+
+                    // Get the characteristic for printing
+                    printerCharacteristic = await service.getCharacteristic('print_characteristic');
+
+                    // Enable the print button
+                    printButton.disabled = false;
+
+                    console.log('Connected to printer:', device.name);
+                    alert('Connected to printer: ' + device.name);
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Failed to connect to printer');
+                }
+            }
+
+            // Function to handle the print button click event
+            async function print() {
+                try {
+                    // Prepare print data (replace 'printData' with your actual print data)
+                    const printData = new Uint8Array([0x01, 0x02, 0x03]); // Example print data
+
+                    // Write print data to the printer characteristic
+                    await printerCharacteristic.writeValue(printData);
+
+                    console.log('Print job sent successfully');
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Failed to send print job');
+                }
+            }
+
+            // Add event listeners to the connect and print buttons
+            connectButton.addEventListener('click', connect);
+            printButton.addEventListener('click', print);
+        } else {
+            console.error('Bluetooth is not supported in this browser.');
+        }
+    </script>
+</body>
+</html>
